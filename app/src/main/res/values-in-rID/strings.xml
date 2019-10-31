@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ClouThing</string>
+    <string name="open">Buka</string>
+    <string name="close">Tutup</string>
+
+    <string name="form_title">Judul</string>
+    <string name="form_laundry_rec">Penerima Laundry</string>
+    <string name="form_location">Tempat Laundry</string>
+    <string name="form_upload">Catatkan baju!</string>
+    <string name="button_save">Simpan</string>
+    <string name="button_cancel">Batalkan</string>
+    <string name="button_remove">Hapus</string>
+</resources>

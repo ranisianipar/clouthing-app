@@ -2,4 +2,13 @@
     <string name="app_name">ClouThing</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+
+    <string name="form_title">Title</string>
+    <string name="form_laundry_rec">Laundry Receipent</string>
+    <string name="form_location">Pick up location</string>
+    <string name="form_upload">Upload clothes!</string>
+    <string name="button_save">Save</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_remove">Remove</string>
+
 </resources>
