@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey;
 
 import java.util.Date;
 
-@Entity
+@Entity(tableName = "Laundries")
 public class Laundry {
     @PrimaryKey(autoGenerate = true)
     private long id;
@@ -23,7 +23,19 @@ public class Laundry {
     private LaundryStatus status;
 
     @NonNull
-    private Date pickUpTime;
+    private Date pickUpDate;
+
+    @NonNull
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(@NonNull Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    @NonNull
+    private Date createdAt;
 
     public long getId() {
         return id;
@@ -68,12 +80,12 @@ public class Laundry {
     }
 
     @NonNull
-    public Date getPickUpTime() {
-        return pickUpTime;
+    public Date getPickUpDate() {
+        return pickUpDate;
     }
 
-    public void setPickUpTime(@NonNull Date pickUpTime) {
-        this.pickUpTime = pickUpTime;
+    public void setPickUpDate(@NonNull Date pickUpDate) {
+        this.pickUpDate = pickUpDate;
     }
 
     // images
