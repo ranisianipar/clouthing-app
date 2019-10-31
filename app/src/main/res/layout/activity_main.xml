@@ -7,21 +7,36 @@
     tools:context=".MainActivity"
     android:id="@+id/drawerLayout">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
 
         <TextView
             android:id="@+id/tv_mainActivity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:textAlignment="center"
+            android:layout_marginTop="68dp"
             android:layout_weight="1"
+            android:text="SEMENTARA"
+            android:textAlignment="center"
             android:textSize="24dp"
-            android:text="Main Activity" />
-    </LinearLayout>
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="16dp" />
+
+        <ImageButton
+            android:id="@+id/bt_create_form"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/button_add"
+            android:src="@drawable/ic_plus_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.9"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.95" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <com.google.android.material.navigation.NavigationView
