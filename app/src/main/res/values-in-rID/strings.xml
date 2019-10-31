@@ -3,6 +3,7 @@
     <string name="app_name">ClouThing</string>
     <string name="open">Buka</string>
     <string name="close">Tutup</string>
+    <string name="greeting">Hi!</string>
 
     <string name="form_title">Judul</string>
     <string name="form_laundry_rec">Penerima Laundry</string>
