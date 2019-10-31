@@ -8,17 +8,17 @@ import androidx.room.Query;
 
 import java.util.List;
 
-@Dao
+//@Dao
 public interface LaundryDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(Laundry laundry);
-
-    @Query("DELETE FROM Laundries")
-    void deleteAll();
-
-    @Query("SELECT * FROM Laundries ORDER BY createdAt ASC")
-    LiveData<List<Laundry>> getAllLaundries();
+//    @Insert(onConflict = OnConflictStrategy.REPLACE)
+//    void insert(Laundry laundry);
+//
+//    @Query("DELETE FROM Laundries")
+//    void deleteAll();
+//
+//    @Query("SELECT * FROM Laundries ORDER BY createdAt ASC")
+//    LiveData<List<Laundry>> getAllLaundries();
 
 //    @Query("SELECT * FROM Laundries WHERE status = "+ Laundry.LaundryStatus.PENDING +" ")
 //    List<Laundry> getPendingLaundries();

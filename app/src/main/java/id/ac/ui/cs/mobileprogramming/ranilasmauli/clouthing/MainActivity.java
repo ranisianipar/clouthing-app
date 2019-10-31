@@ -7,8 +7,11 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle mToggle;
 
     private SidebarViewModel sidebarViewModel;
+
+    private ImageButton buttonCreateForm;
 
 
     @Override
@@ -38,6 +43,14 @@ public class MainActivity extends AppCompatActivity {
         sidebarViewModel = ViewModelProviders.of(this).get(SidebarViewModel.class);
 
 
+        buttonCreateForm = findViewById(R.id.bt_create_form);
+        buttonCreateForm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(getApplicationContext(), FormActivity.class);
+                MainActivity.this.startActivity(myIntent);
+            };
+        });
     }
 
 //
