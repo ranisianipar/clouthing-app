@@ -15,6 +15,7 @@ import java.util.Calendar;
 public class FormActivity extends AppCompatActivity {
 
     private EditText pickDate;
+    final Calendar calendar = Calendar.getInstance();
 
 //    button
     private Button cancelButton;
@@ -29,12 +30,10 @@ public class FormActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // get current date
-
-                final Calendar c = Calendar.getInstance();
-                int mYear = c.get(Calendar.YEAR);
-                int mMonth = c.get(Calendar.MONTH);
-                int mDay = c.get(Calendar.DAY_OF_MONTH);
-                DatePickerDialog datePickerDialog = new DatePickerDialog(getApplicationContext(),
+                int mYear = calendar.get(Calendar.YEAR);
+                int mMonth = calendar.get(Calendar.MONTH);
+                int mDay = calendar.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(FormActivity.this,
                         new DatePickerDialog.OnDateSetListener() {
 
                             @Override
@@ -56,6 +55,11 @@ public class FormActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        // do nothing
     }
 
 
