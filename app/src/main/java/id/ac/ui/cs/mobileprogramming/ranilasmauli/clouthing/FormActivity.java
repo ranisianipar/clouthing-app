@@ -3,12 +3,16 @@ package id.ac.ui.cs.mobileprogramming.ranilasmauli.clouthing;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.content.ClipData;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.util.Calendar;
 
@@ -16,8 +20,12 @@ public class FormActivity extends AppCompatActivity {
 
     private EditText pickDate;
     final Calendar calendar = Calendar.getInstance();
+    public static final int PICK_IMAGE = 1;
 
-//    button
+    // Text View
+    private TextView textViewCountClothes;
+
+    // Button
     private Button cancelButton;
     private Button saveButton;
     private Button uploadButton;
@@ -27,7 +35,8 @@ public class FormActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form);
 
-        pickDate = findViewById(R.id.et_end_date);
+        init();
+
         pickDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -50,7 +59,7 @@ public class FormActivity extends AppCompatActivity {
             };
         });
 
-        cancelButton = findViewById(R.id.bt_cancel);
+
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,10 +74,18 @@ public class FormActivity extends AppCompatActivity {
             }
         });
 
+        uploadButton = findViewById(R.id.bt_upload);
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // upload multiple image
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(
+                        Intent.createChooser(intent, "Pick ur clothes"),
+                        PICK_IMAGE
+                );
             }
         });
     }
@@ -78,5 +95,37 @@ public class FormActivity extends AppCompatActivity {
         // do nothing
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        int countImage = 1;
 
+        if (requestCode == PICK_IMAGE && resultCode == RESULT_OK) {
+            ClipData clipData = data.getClipData();
+            // multiple images
+            if (clipData != null) {
+                countImage = clipData.getItemCount();
+                for (int i = 0; i < clipData.getItemCount(); i++) {
+
+                    Uri uri = clipData.getItemAt(i).getUri();
+                    Log.d("IMAGES - Multiple", "URI: "+uri);
+                }
+
+            }
+
+            else if (data.getData()!= null) {
+                Uri uri = data.getData();
+                Log.d("IMAGES - Single", "URI: "+uri);
+            }
+            textViewCountClothes.setText(countImage);
+
+        }
+    }
+
+    private void init() {
+        pickDate = findViewById(R.id.et_end_date);
+        cancelButton = findViewById(R.id.bt_cancel);
+        saveButton = findViewById(R.id.bt_save);
+        textViewCountClothes = findViewById(R.id.tv_count_clothes);
+    }
 }
