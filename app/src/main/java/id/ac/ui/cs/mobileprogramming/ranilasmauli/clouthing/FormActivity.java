@@ -117,7 +117,7 @@ public class FormActivity extends AppCompatActivity {
                 Uri uri = data.getData();
                 Log.d("IMAGES - Single", "URI: "+uri);
             }
-            textViewCountClothes.setText(countImage);
+            textViewCountClothes.setText(countImage + "");
 
         }
     }

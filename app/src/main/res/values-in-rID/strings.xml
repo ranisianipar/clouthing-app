@@ -15,4 +15,8 @@
     <string name="button_save">Simpan</string>
     <string name="button_cancel">Batalkan</string>
     <string name="button_remove">Hapus</string>
+
+    <string name="nav_home">Home</string>
+    <string name="nav_logout">Keluar</string>
+    <string name="nav_laundry">Laundry</string>
 </resources>

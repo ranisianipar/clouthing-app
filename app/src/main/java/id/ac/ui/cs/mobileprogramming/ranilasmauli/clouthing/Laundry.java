@@ -6,95 +6,105 @@ import androidx.room.PrimaryKey;
 
 import java.util.Date;
 
-//@Entity(tableName = "Laundries")
+@Entity(tableName = "Laundries")
 public class Laundry {
-//    @PrimaryKey(autoGenerate = true)
-//    private long id;
-//
-//    @NonNull
-//    private String title;
-//
-//    @NonNull
-//    private int amount;
-//
-//    private String pic;
-//
-//    @NonNull
-//    private LaundryStatus status;
-//
-//    @NonNull
-//    private Date pickUpDate;
-//
-//    @NonNull
-//    public Date getCreatedAt() {
-//        return createdAt;
-//    }
-//
-//    public void setCreatedAt(@NonNull Date createdAt) {
-//        this.createdAt = createdAt;
-//    }
-//
-//    @NonNull
-//    private Date createdAt;
-//
-//    public long getId() {
-//        return id;
-//    }
-//
-//    public void setId(long id) {
-//        this.id = id;
-//    }
-//
-//    @NonNull
-//    public String getTitle() {
-//        return title;
-//    }
-//
-//    public void setTitle(@NonNull String title) {
-//        this.title = title;
-//    }
-//
-//    public int getAmount() {
-//        return amount;
-//    }
-//
-//    public void setAmount(int amount) {
-//        this.amount = amount;
-//    }
-//
-//    public String getPic() {
-//        return pic;
-//    }
-//
-//    public void setPic(String pic) {
-//        this.pic = pic;
-//    }
-//
-//    @NonNull
-//    public LaundryStatus getStatus() {
-//        return status;
-//    }
-//
-//    public void setStatus(@NonNull LaundryStatus status) {
-//        this.status = status;
-//    }
-//
-//    @NonNull
-//    public Date getPickUpDate() {
-//        return pickUpDate;
-//    }
-//
-//    public void setPickUpDate(@NonNull Date pickUpDate) {
-//        this.pickUpDate = pickUpDate;
-//    }
-//
-//    // images
-//    // location
-//
-//
-//    public enum LaundryStatus {
-//        PENDING,
-//        DONE,
-//        CANCELED
-//    }
+    @PrimaryKey(autoGenerate = true)
+    private long id;
+
+    @NonNull
+    private String title;
+
+    @NonNull
+    private int amount;
+
+    private String pic;
+
+    @NonNull
+    private int status;
+
+    @NonNull
+    private long pickUpDate;
+
+    @NonNull
+    private long createdAt;
+
+    // images
+    // location
+
+    @NonNull
+    public long getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(@NonNull long createdAt) {
+        this.createdAt = createdAt;
+    }
+
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    @NonNull
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(@NonNull String title) {
+        this.title = title;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    public String getPic() {
+        return pic;
+    }
+
+    public void setPic(String pic) {
+        this.pic = pic;
+    }
+
+    @NonNull
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(@NonNull int status) {
+        this.status = status;
+    }
+
+    public void setStatus(@NonNull LaundryStatus status) {
+        if (status == LaundryStatus.CANCELED)
+            setStatus(2);
+        else if (status == LaundryStatus.DONE)
+            setStatus(1);
+        else if (status == LaundryStatus.PENDING)
+            setStatus(0);
+    }
+
+    @NonNull
+    public long getPickUpDate() {
+        return pickUpDate;
+    }
+
+    public void setPickUpDate(@NonNull long pickUpDate) {
+        this.pickUpDate = pickUpDate;
+    }
+
+
+    public enum LaundryStatus {
+        PENDING, // 0
+        DONE, // 1
+        CANCELED // 2
+    }
 }

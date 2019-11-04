@@ -15,4 +15,8 @@
     <string name="button_cancel">Cancel</string>
     <string name="button_remove">Remove</string>
 
+    <string name="nav_home">Home</string>
+    <string name="nav_logout">Logout</string>
+    <string name="nav_laundry">Laundry</string>
+
 </resources>
