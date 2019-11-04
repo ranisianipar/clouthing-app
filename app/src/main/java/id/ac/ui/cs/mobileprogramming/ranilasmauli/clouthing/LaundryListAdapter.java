@@ -48,7 +48,7 @@ public class LaundryListAdapter extends RecyclerView.Adapter<LaundryListAdapter.
         }
     }
 
-    void setWords(List<Laundry> laundries){
+    void setLaundries(List<Laundry> laundries){
         laundries = laundries;
         notifyDataSetChanged();
     }

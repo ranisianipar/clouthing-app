@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel;
 
 public class SidebarViewModel extends ViewModel {
     public boolean isHomeActive;
-    public boolean isLogActive;
+    public boolean isLaundryActive;
 
     public boolean isHomeActive() {
         return isHomeActive;
@@ -14,16 +14,16 @@ public class SidebarViewModel extends ViewModel {
         isHomeActive = homeActive;
     }
 
-    public boolean isLogActive() {
-        return isLogActive;
+    public boolean isLaundryActive() {
+        return isLaundryActive;
     }
 
-    public void setLogActive(boolean logActive) {
-        isLogActive = logActive;
+    public void setLaundryActive(boolean laundryActive) {
+        isLaundryActive = laundryActive;
     }
 
     public void reset() {
         this.isHomeActive = false;
-        this.isLogActive = false;
+        this.isLaundryActive = false;
     }
 }
