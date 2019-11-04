@@ -1,10 +1,13 @@
 package id.ac.ui.cs.mobileprogramming.ranilasmauli.clouthing;
 
 import android.content.Context;
+import android.os.AsyncTask;
 
+import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 @Database(entities = {Laundry.class}, version = 1)
 public abstract class ClouThingDatabase extends RoomDatabase {
@@ -25,5 +28,37 @@ public abstract class ClouThingDatabase extends RoomDatabase {
             }
         }
         return INSTANCE;
+    }
+
+    // FOR DEVELOPMENT PURPOSE
+    private static RoomDatabase.Callback sRoomDatabaseCallback =
+            new RoomDatabase.Callback(){
+
+                @Override
+                public void onOpen (@NonNull SupportSQLiteDatabase db){
+                    super.onOpen(db);
+                    new PopulateDbAsync(INSTANCE).execute();
+                }
+            };
+
+    private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
+
+        private final LaundryDao dao;
+
+        PopulateDbAsync(ClouThingDatabase db) {
+            dao = db.laundryDao();
+        }
+
+        @Override
+        protected Void doInBackground(final Void... params) {
+            dao.deleteAll();
+            Laundry laundry = new Laundry();
+            laundry.setTitle("NGAKAK");
+            dao.insert(laundry);
+            laundry = new Laundry();
+            laundry.setTitle("AYO DONG");
+            dao.insert(laundry);
+            return null;
+        }
     }
 }
