@@ -16,6 +16,8 @@
     <string name="button_cancel">Batalkan</string>
     <string name="button_remove">Hapus</string>
 
+    <string name="laundry_title">Laundry Ku</string>
+
     <string name="nav_home">Home</string>
     <string name="nav_logout">Keluar</string>
     <string name="nav_laundry">Laundry</string>

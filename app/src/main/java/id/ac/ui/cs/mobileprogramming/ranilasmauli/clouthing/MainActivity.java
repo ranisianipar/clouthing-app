@@ -1,7 +1,9 @@
 package id.ac.ui.cs.mobileprogramming.ranilasmauli.clouthing;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -12,8 +14,11 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+import com.google.android.material.navigation.NavigationView;
+
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout mDrawerLayout;
 
@@ -21,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     private SidebarViewModel sidebarViewModel;
 
-    private ImageButton buttonCreateForm;
+//    private ImageButton buttonCreateForm;
 
 
     @Override
@@ -30,27 +35,27 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
-        //
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
 
-        mDrawerLayout.addDrawerListener(mToggle);
-        mToggle.syncState();
 
         // bagian header di-enabling
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         sidebarViewModel = ViewModelProviders.of(this).get(SidebarViewModel.class);
 
+        mDrawerLayout.addDrawerListener(mToggle);
+        mToggle.syncState();
 
-        buttonCreateForm = findViewById(R.id.bt_create_form);
-        buttonCreateForm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent myIntent = new Intent(getApplicationContext(), FormActivity.class);
-                MainActivity.this.startActivity(myIntent);
-            };
-        });
+        // default fragment
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new HomeFragment()).commit();
+            navigationView.setCheckedItem(R.id.nav_home);
+        }
+
     }
 
 //
@@ -63,4 +68,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+
+            case R.id.nav_home:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new HomeFragment()).commit();
+                break;
+            case R.id.nav_laundry:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new LaundryFragment()).commit();
+                break;
+            case R.id.nav_logout:
+                Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show();
+                // do logout
+                break;
+        }
+        // close drawer
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
 }
