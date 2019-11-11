@@ -38,6 +38,15 @@ public class LaundryFragment extends Fragment implements LaundryListAdapter.Item
 
         recyclerView.setAdapter(adapter);
 
+//        // add observer to handle synced data (live)
+//        laundryViewModel.getAllLaundries().observe(this, new Observer<List<Laundry>>() {
+//            @Override
+//            public void onChanged(List<Laundry> laundries) {
+//                // update cache
+//                laundryListAdapter.setLaundries(laundries);
+//            }
+//        });
+
         return laundryView;
     }
 
@@ -56,39 +65,3 @@ public class LaundryFragment extends Fragment implements LaundryListAdapter.Item
         Toast.makeText(view.getContext(), "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
     }
 }
-
-
-
-//public class LaundryActivity extends AppCompatActivity {
-//
-//    private LaundryViewModel laundryViewModel;
-//    private LaundryListAdapter laundryListAdapter;
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_laundry);
-//
-//        // init
-//        laundryViewModel = ViewModelProviders.of(this).get(LaundryViewModel.class);
-//        laundryListAdapter = new LaundryListAdapter(this, null);
-//
-//        RecyclerView recyclerView = findViewById(R.id.rv_laundries);
-//        final LaundryListAdapter adapter = new LaundryListAdapter(this, null);
-//        recyclerView.setAdapter(adapter);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//
-//
-//
-//        // add observer to handle synced data (live)
-//        laundryViewModel.getAllLaundries().observe(this, new Observer<List<Laundry>>() {
-//            @Override
-//            public void onChanged(List<Laundry> laundries) {
-//                // update cache
-//                laundryListAdapter.setLaundries(laundries);
-//            }
-//        });
-//
-//
-//    }
-//}
