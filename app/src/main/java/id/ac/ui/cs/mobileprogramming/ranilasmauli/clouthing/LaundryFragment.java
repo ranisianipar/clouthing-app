@@ -1,18 +1,94 @@
 package id.ac.ui.cs.mobileprogramming.ranilasmauli.clouthing;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-public class LaundryFragment extends Fragment {
+import java.util.ArrayList;
+import java.util.List;
+
+public class LaundryFragment extends Fragment implements LaundryListAdapter.ItemClickListener {
+
+    LaundryListAdapter adapter;
+    List<Laundry> laundries = new ArrayList<>();
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_laundry, container, false);
+        final View laundryView = inflater.inflate(R.layout.fragment_laundry, container, false);
+        seed();
+
+        RecyclerView recyclerView = laundryView.findViewById(R.id.rv_laundries);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+
+
+        Log.d("LAUNDRIES RV", "onCreateView: "+ laundryView.findViewById(R.id.rv_laundries));
+
+        // this.getActivity() -> MainActivity
+        adapter = new LaundryListAdapter(this.getActivity(), laundries);
+
+        recyclerView.setAdapter(adapter);
+
+        return laundryView;
+    }
+
+    void seed() {
+        for (int x = 0; x < 5; x++) {
+            Laundry dummy = new Laundry();
+            dummy.setTitle("Dummy "+x);
+            dummy.setAmount(x+3);
+            laundries.add(dummy);
+        }
+
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        Toast.makeText(view.getContext(), "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
     }
 }
+
+
+
+//public class LaundryActivity extends AppCompatActivity {
+//
+//    private LaundryViewModel laundryViewModel;
+//    private LaundryListAdapter laundryListAdapter;
+//
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_laundry);
+//
+//        // init
+//        laundryViewModel = ViewModelProviders.of(this).get(LaundryViewModel.class);
+//        laundryListAdapter = new LaundryListAdapter(this, null);
+//
+//        RecyclerView recyclerView = findViewById(R.id.rv_laundries);
+//        final LaundryListAdapter adapter = new LaundryListAdapter(this, null);
+//        recyclerView.setAdapter(adapter);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//
+//
+//
+//        // add observer to handle synced data (live)
+//        laundryViewModel.getAllLaundries().observe(this, new Observer<List<Laundry>>() {
+//            @Override
+//            public void onChanged(List<Laundry> laundries) {
+//                // update cache
+//                laundryListAdapter.setLaundries(laundries);
+//            }
+//        });
+//
+//
+//    }
+//}

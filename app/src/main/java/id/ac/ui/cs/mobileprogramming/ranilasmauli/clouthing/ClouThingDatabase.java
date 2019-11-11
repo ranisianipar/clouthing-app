@@ -9,7 +9,11 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {Laundry.class}, version = 1)
+/*
+* Export scheme: https://stackoverflow.com/questions/44322178/room-schema-export-directory-is-not-provided-to-the-annotation-processor-so-we
+* */
+
+@Database(entities = {Laundry.class}, version = 1, exportSchema = false)
 public abstract class ClouThingDatabase extends RoomDatabase {
 
     public abstract LaundryDao laundryDao();

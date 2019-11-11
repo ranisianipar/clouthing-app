@@ -1,6 +1,7 @@
 package id.ac.ui.cs.mobileprogramming.ranilasmauli.clouthing;
 
-import android.app.Activity;
+import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,46 +13,66 @@ import java.util.List;
 
 public class LaundryListAdapter extends RecyclerView.Adapter<LaundryListAdapter.LaundryViewHolder> {
 
-    private final Activity context;
+    private final Context context;
     private final LayoutInflater mInflater;
     private List<Laundry> laundries; // Cached copy of laundries
 
+    private ItemClickListener itemClickListener;
 
-    public LaundryListAdapter(Activity activity) {
-        this.context = activity;
-        mInflater = activity.getLayoutInflater();
+
+    public LaundryListAdapter(Context context, List<Laundry> laundries) {
+        this.context = context;
+        this.laundries = laundries;
+        mInflater = LayoutInflater.from(context);
     }
 
     class LaundryViewHolder extends RecyclerView.ViewHolder {
-        private final TextView laundryItemView;
+        private final TextView laundryTitle;
+        private final TextView laundryAmount;
 
         private LaundryViewHolder(View itemView) {
             super(itemView);
-            laundryItemView = itemView.findViewById(R.id.tv_laundry);
+            laundryTitle = itemView.findViewById(R.id.tv_laundry_title);
+            laundryAmount = itemView.findViewById(R.id.tv_laundry_amount);
+            Log.d("LAUNDRY AMOUNT", "LaundryViewHolder: "+laundryAmount);
         }
     }
 
     @Override
     public LaundryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = mInflater.inflate(R.layout.laundry_item, parent, false);
+        View itemView = mInflater.inflate(R.layout.item_laundry, parent, false);
+
+        Log.d("ITEM AMOUNT", "onCreateViewHolder: "+itemView.findViewById(R.id.tv_laundry_amount));
         return new LaundryViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(LaundryViewHolder holder, int position) {
+        Log.d("LAUNDRIES", "onBindViewHolder: "+ laundries);
         if (laundries != null) {
             Laundry current = laundries.get(position);
-            holder.laundryItemView.setText(current.getTitle());
+            holder.laundryTitle.setText(current.getTitle());
+
+            Log.d("LAUNDRY AMOUNT", "onBindViewHolder, holder: "+ holder.laundryAmount.getText());
+            // kenapa not found resource? padahal laundry amountnya dapet.
+            holder.laundryAmount.setText("");
         } else {
             // Covers the case of data not being ready yet.
-            holder.laundryItemView.setText("No Word");
+            holder.laundryTitle.setText("No Laundry");
+            holder.laundryTitle.setText("0");
         }
     }
 
     void setLaundries(List<Laundry> laundries){
-        laundries = laundries;
+        this.laundries = laundries;
         notifyDataSetChanged();
     }
+
+    public Laundry getItem(int position) {
+        return laundries.get(position);
+    }
+
+
 
     // getItemCount() is called many times, and when it is first called,
     // laundries has not been updated (means initially, it's null, and we can't return null).
@@ -60,5 +81,15 @@ public class LaundryListAdapter extends RecyclerView.Adapter<LaundryListAdapter.
         if (laundries != null)
             return laundries.size();
         else return 0;
+    }
+
+    // allows clicks events to be caught
+    void setClickListener(ItemClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
+    }
+
+    // parent activity will implement this method to respond to click events
+    public interface ItemClickListener {
+        void onItemClick(View view, int position);
     }
 }
