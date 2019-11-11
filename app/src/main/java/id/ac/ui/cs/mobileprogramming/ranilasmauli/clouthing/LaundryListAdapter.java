@@ -20,21 +20,32 @@ public class LaundryListAdapter extends RecyclerView.Adapter<LaundryListAdapter.
     private ItemClickListener itemClickListener;
 
 
-    public LaundryListAdapter(Context context, List<Laundry> laundries) {
+    public LaundryListAdapter(Context context, List<Laundry> laundries, ItemClickListener itemClickListener) {
         this.context = context;
         this.laundries = laundries;
+        this.itemClickListener = itemClickListener;
         mInflater = LayoutInflater.from(context);
     }
 
-    class LaundryViewHolder extends RecyclerView.ViewHolder {
+    class LaundryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView laundryTitle;
         private final TextView laundryAmount;
+        private ItemClickListener itemClickListener;
 
-        private LaundryViewHolder(View itemView) {
+        private LaundryViewHolder(View itemView, ItemClickListener clickListener) {
             super(itemView);
+            this.itemClickListener = clickListener;
+
             laundryTitle = itemView.findViewById(R.id.tv_laundry_title);
             laundryAmount = itemView.findViewById(R.id.tv_laundry_amount);
             Log.d("LAUNDRY AMOUNT", "LaundryViewHolder: "+laundryAmount);
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            itemClickListener.onItemClick(getAdapterPosition());
         }
     }
 
@@ -43,7 +54,7 @@ public class LaundryListAdapter extends RecyclerView.Adapter<LaundryListAdapter.
         View itemView = mInflater.inflate(R.layout.item_laundry, parent, false);
 
         Log.d("ITEM AMOUNT", "onCreateViewHolder: "+itemView.findViewById(R.id.tv_laundry_amount));
-        return new LaundryViewHolder(itemView);
+        return new LaundryViewHolder(itemView, itemClickListener);
     }
 
     @Override
@@ -90,6 +101,6 @@ public class LaundryListAdapter extends RecyclerView.Adapter<LaundryListAdapter.
 
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
-        void onItemClick(View view, int position);
+        void onItemClick(int position);
     }
 }

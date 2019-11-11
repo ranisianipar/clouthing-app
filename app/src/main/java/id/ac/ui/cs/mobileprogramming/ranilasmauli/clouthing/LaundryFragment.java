@@ -34,7 +34,7 @@ public class LaundryFragment extends Fragment implements LaundryListAdapter.Item
         Log.d("LAUNDRIES RV", "onCreateView: "+ laundryView.findViewById(R.id.rv_laundries));
 
         // this.getActivity() -> MainActivity
-        adapter = new LaundryListAdapter(this.getActivity(), laundries);
+        adapter = new LaundryListAdapter(this.getActivity(), laundries, this);
 
         recyclerView.setAdapter(adapter);
 
@@ -61,7 +61,7 @@ public class LaundryFragment extends Fragment implements LaundryListAdapter.Item
     }
 
     @Override
-    public void onItemClick(View view, int position) {
-        Toast.makeText(view.getContext(), "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
+    public void onItemClick(int position) {
+        Toast.makeText(this.getContext(), "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
     }
 }
