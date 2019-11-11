@@ -80,6 +80,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, new LaundryFragment()).commit();
                 break;
+            case R.id.nav_language:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new LanguageFragment()).commit();
+                break;
             case R.id.nav_logout:
                 Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show();
                 // do logout

@@ -106,6 +106,14 @@ public class Laundry implements Parcelable {
         this.pickUpDate = pickUpDate;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     public Laundry() {
 
     }
@@ -126,6 +134,7 @@ public class Laundry implements Parcelable {
             return new Laundry[i];
         }
     };
+
 
     @Override
     public int describeContents() {

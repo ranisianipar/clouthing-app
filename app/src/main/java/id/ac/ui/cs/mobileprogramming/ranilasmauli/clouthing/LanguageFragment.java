@@ -1,6 +1,5 @@
 package id.ac.ui.cs.mobileprogramming.ranilasmauli.clouthing;
 
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,6 +10,7 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,7 +33,15 @@ public class LanguageFragment extends Fragment {
         final View languageView = inflater.inflate(R.layout.fragment_language, container, false);
 
         radioGroup = languageView.findViewById(R.id.radio_group_lang);
-        textViewSelectedLang = languageView.findViewById(R.id.tv_lang_selected_msg);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                group.check(checkedId);
+            }
+        });
+
+        textViewSelectedLang = languageView.findViewById(R.id.tv_current_lang);
         buttonSave = languageView.findViewById(R.id.bt_save_lang);
         buttonSave.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -41,15 +49,17 @@ public class LanguageFragment extends Fragment {
                 radioButton = languageView.findViewById(radioGroup.getCheckedRadioButtonId());
                 textViewSelectedLang.setText(radioButton.getText());
 
+                Toast.makeText(view.getContext(), "RADIO BUTTON " + radioButton.getText(), Toast.LENGTH_SHORT).show();
                 // do setup
-                if (radioButton.getText().equals(R.id.lang_en)) setLocal("en", languageView);
-                else if (radioButton.getText().equals(R.id.lang_id)) setLocal("ID", languageView);
+                if (radioGroup.getCheckedRadioButtonId() == R.id.lang_en) setLocal("en", languageView);
+                else if (radioGroup.getCheckedRadioButtonId() == R.id.lang_id) setLocal("ID", languageView);
             }
         });
 
         if (savedInstanceState == null) {
-            // default lang English
+            Toast.makeText(languageView.getContext(), "DEFAULT", Toast.LENGTH_SHORT).show();
 
+            // default lang English
             textViewSelectedLang.setText(((TextView) languageView.findViewById(R.id.lang_en)).getText());
 
             // do default setup
@@ -63,9 +73,11 @@ public class LanguageFragment extends Fragment {
     public void setLocal(String lang, View v) {
         Locale locale = new Locale(lang);
         Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.setLocale(locale);
+        v.getContext().getResources().getConfiguration().setLocale(locale);
+        v.getContext().getResources().updateConfiguration(v.getResources().getConfiguration(),
+                v.getContext().getResources().getDisplayMetrics());
 
-        v.getContext().getResources().updateConfiguration(config, v.getContext().getResources().getDisplayMetrics());
+        Toast.makeText(v.getContext(), "LANG: "+locale.getLanguage(), Toast.LENGTH_SHORT).show();
+
     }
 }
