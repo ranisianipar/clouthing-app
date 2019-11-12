@@ -1,5 +1,8 @@
 package id.ac.ui.cs.mobileprogramming.ranilasmauli.clouthing;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -7,7 +10,7 @@ import androidx.room.PrimaryKey;
 import java.util.Date;
 
 @Entity(tableName = "Laundries")
-public class Laundry {
+public class Laundry implements Parcelable {
     @PrimaryKey(autoGenerate = true)
     private long id;
 
@@ -29,6 +32,8 @@ public class Laundry {
     private long createdAt;
 
     // images
+    private String image;
+
     // location
 
     @NonNull
@@ -99,6 +104,34 @@ public class Laundry {
 
     public void setPickUpDate(@NonNull long pickUpDate) {
         this.pickUpDate = pickUpDate;
+    }
+
+    protected Laundry(Parcel parcel) {
+        this.title = parcel.readString();
+        this.amount = parcel.readInt();
+    }
+
+    public static final Creator<Laundry> CREATOR = new Creator<Laundry>() {
+        @Override
+        public Laundry createFromParcel(Parcel parcel) {
+            return new Laundry(parcel);
+        }
+
+        @Override
+        public Laundry[] newArray(int i) {
+            return new Laundry[i];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(title);
+        parcel.writeInt(amount);
     }
 
 
