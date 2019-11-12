@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ClouThing</string>
     <string name="open">Buka</string>
     <string name="close">Tutup</string>
     <string name="greeting">Hi!</string>
@@ -21,4 +20,8 @@
     <string name="nav_home">Home</string>
     <string name="nav_logout">Keluar</string>
     <string name="nav_laundry">Laundry</string>
+    <string name="nav_language">Bahasa</string>
+
+
+    <string name="lang_selected_msg">Bahasa yang digunakan:</string>
 </resources>

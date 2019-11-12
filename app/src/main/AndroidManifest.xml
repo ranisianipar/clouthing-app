@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".LaundryDetailActivity"></activity>
         <activity android:name=".FormActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity" android:configChanges="locale|orientation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

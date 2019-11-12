@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="form_clothes">Your Clothes:</string>
+    <string name="form_title">Title</string>
+    <string name="button_save">Save</string>
+    <string name="button_remove">Remove</string>
+    <string name="form_location">Pick up location</string>
+    <string name="open">Open</string>
+    <string name="form_date">pick date!</string>
+    <string name="laundry_title">My Laundry</string>
+    <string name="nav_logout">Logout</string>
+    <string name="form_laundry_rec">Laundry Receipent</string>
+    <string name="nav_laundry">Laundry</string>
+    <string name="nav_language">Language</string>
+    <string name="nav_home">Home</string>
+    <string name="greeting">Hi!</string>
+    <string name="lang_selected_msg">Current Language</string>
+    <string name="close">Close</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_upload">Add clothes!</string>
+    <string name="form_activity_title">Add Laundry</string>
+</resources>

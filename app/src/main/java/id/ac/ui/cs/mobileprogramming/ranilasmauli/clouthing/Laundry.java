@@ -106,6 +106,10 @@ public class Laundry implements Parcelable {
         this.pickUpDate = pickUpDate;
     }
 
+    public Laundry() {
+
+    }
+
     protected Laundry(Parcel parcel) {
         this.title = parcel.readString();
         this.amount = parcel.readInt();

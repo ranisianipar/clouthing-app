@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ClouThing</string>
+    <string name="app_name" translatable="false">ClouThing</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
     <string name="greeting">Hi!</string>
@@ -20,8 +20,9 @@
     <string name="nav_home">Home</string>
     <string name="nav_logout">Logout</string>
     <string name="nav_laundry">Laundry</string>
+    <string name="nav_language">Language</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="lang_selected_msg">Current Language</string>
+
 
 </resources>
