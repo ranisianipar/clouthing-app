@@ -1,6 +1,5 @@
 package id.ac.ui.cs.mobileprogramming.ranilasmauli.clouthing;
 
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -41,7 +40,7 @@ public class LanguageFragment extends Fragment {
             }
         });
 
-        textViewSelectedLang = languageView.findViewById(R.id.tv_current_lang);
+        textViewSelectedLang = languageView.findViewById(R.id.tv_lang_selected_msg);
         buttonSave = languageView.findViewById(R.id.bt_save_lang);
         buttonSave.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -55,24 +54,16 @@ public class LanguageFragment extends Fragment {
                 else if (radioGroup.getCheckedRadioButtonId() == R.id.lang_id) setLocal("ID", languageView);
             }
         });
+        // reset old radio button
+        radioButton = languageView.findViewById(radioGroup.getCheckedRadioButtonId());
+        radioButton.setChecked(false);
 
-        if (savedInstanceState == null) {
-            Toast.makeText(languageView.getContext(), "DEFAULT", Toast.LENGTH_SHORT).show();
-
-            // default lang English
-            textViewSelectedLang.setText(((TextView) languageView.findViewById(R.id.lang_en)).getText());
-
-            // do default setup
-            setLocal("en", languageView);
-
-        }
         return languageView;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     public void setLocal(String lang, View v) {
         Locale locale = new Locale(lang);
-        Locale.setDefault(locale);
         v.getContext().getResources().getConfiguration().setLocale(locale);
         v.getContext().getResources().updateConfiguration(v.getResources().getConfiguration(),
                 v.getContext().getResources().getDisplayMetrics());

@@ -47,28 +47,16 @@
         app:layout_constraintTop_toBottomOf="@+id/radio_group_lang"
         tools:layout_editor_absoluteX="0dp" />
 
-
-    <TextView
-        android:id="@+id/tv_current_lang"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:text="English"
-        android:textSize="28sp"
-        android:textAlignment="center"
-        app:layout_constraintTop_toBottomOf="@+id/tv_lang_selected_msg"
-        tools:layout_editor_absoluteX="0dp" />
-
     <Button
         android:id="@+id/bt_save_lang"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
         android:text="@string/button_save"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_current_lang" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_lang_selected_msg" />
 
 
 

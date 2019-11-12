@@ -14,7 +14,7 @@
     <string name="nav_language">Language</string>
     <string name="nav_home">Home</string>
     <string name="greeting">Hi!</string>
-    <string name="lang_selected_msg">Current Language</string>
+    <string name="lang_selected_msg">English</string>
     <string name="close">Close</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_upload">Add clothes!</string>
