@@ -3,6 +3,7 @@ package id.ac.ui.cs.mobileprogramming.ranilasmauli.clouthing;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.ClipData;
 import android.content.Intent;
 import android.net.Uri;
@@ -13,12 +14,14 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import java.util.Calendar;
 
 public class FormActivity extends AppCompatActivity {
 
     private EditText pickDate;
+    private EditText reminderTime;
     final Calendar calendar = Calendar.getInstance();
     public static final int PICK_IMAGE = 1;
 
@@ -57,6 +60,28 @@ public class FormActivity extends AppCompatActivity {
                         }, mYear, mMonth, mDay);
                 datePickerDialog.show();
             };
+        });
+
+        reminderTime = findViewById(R.id.et_time);
+        reminderTime.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                Calendar mcurrentTime = Calendar.getInstance();
+                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = mcurrentTime.get(Calendar.MINUTE);
+                TimePickerDialog mTimePicker;
+                mTimePicker = new TimePickerDialog(getApplicationContext(), new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        reminderTime.setText( selectedHour + ":" + selectedMinute);
+                    }
+                }, hour, minute, true);//Yes 24 hour time
+                mTimePicker.setTitle("Select Time");
+                mTimePicker.show();
+
+            }
         });
 
 
