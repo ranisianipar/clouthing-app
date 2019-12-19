@@ -79,6 +79,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, new LanguageFragment()).commit();
                 break;
+            case R.id.nav_about_me:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new AboutMeFragment()).commit();
+                break;
+            case R.id.nav_timer:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new TimerFragment()).commit();
+                break;
             case R.id.nav_logout:
                 Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show();
                 // do logout
