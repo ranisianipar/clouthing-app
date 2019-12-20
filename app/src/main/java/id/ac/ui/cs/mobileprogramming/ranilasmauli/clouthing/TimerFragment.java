@@ -27,6 +27,8 @@ import java.util.Locale;
 public class TimerFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final long START_TIME_IN_MILLIS = 60000;
+    private static final String TIME_LEFT_TAG = "timelefttag";
+    private static final String IS_TIME_RUNNING_TAG = "istimerunning";
 
     private CountDownTimer countDownTimer;
 
@@ -44,31 +46,18 @@ public class TimerFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment TimerFragment.
-     */
     // TODO: Rename and change types and number of parameters
-    public static TimerFragment newInstance(String param1, String param2) {
+    public static TimerFragment newInstance() {
         TimerFragment fragment = new TimerFragment();
         Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        setRetainInstance(true);
     }
 
     @Override
@@ -79,6 +68,13 @@ public class TimerFragment extends Fragment {
 
         btStartPause = timerView.findViewById(R.id.bt_start_pause);
         btReset = timerView.findViewById(R.id.bt_reset);
+
+        if (savedInstanceState != null) {
+            // belom ngecek, harusnya si bener
+             timeLeftMillis = savedInstanceState.getInt(TIME_LEFT_TAG);
+             isTimerRunning = savedInstanceState.getBoolean(IS_TIME_RUNNING_TAG);
+            // Lakukan ssesuatu dengan someStateValue jika diperlukan
+        }
 
         btStartPause.setOnClickListener(new View.OnClickListener() {
 
@@ -102,13 +98,6 @@ public class TimerFragment extends Fragment {
 
         updateCountDownText();
         return timerView;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
@@ -143,37 +132,47 @@ public class TimerFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Menyimpan data tertentu (String) ke Bundle
+         savedInstanceState.putLong(TIME_LEFT_TAG, timeLeftMillis);
+         savedInstanceState.putBoolean(IS_TIME_RUNNING_TAG, isTimerRunning);
+
+        // Selalu simpan pemanggil superclass di bawah agar data di view tetap tersimpan
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+
+
     private void startTimer() {
         countDownTimer = new CountDownTimer(timeLeftMillis, 1000) {
             @Override
             public void onTick(long timeLeft) {
                 timeLeftMillis = timeLeft;
-                 updateCountDownText();
+                updateCountDownText();
             }
 
             @Override
             public void onFinish() {
                 isTimerRunning = false;
                 // notification
-                btStartPause.setVisibility(View.INVISIBLE);
-                btReset.setVisibility(View.VISIBLE);
+                updateButton();
                 btReset.setText("Got my clothing cleaned!");
             }
         }.start();
 
         isTimerRunning = true;
-        btStartPause.setText("pause");
-        btReset.setVisibility(View.INVISIBLE);
+        updateButton();
+
     }
     private void pauseTimer() {
         countDownTimer.cancel();
         isTimerRunning = false;
-        btStartPause.setText("start");
-        btReset.setVisibility(View.VISIBLE);
+        updateButton();
     }
     private void resetTimer() {
         timeLeftMillis = START_TIME_IN_MILLIS;
-        btReset.setVisibility(View.INVISIBLE);
+        updateButton();
     }
 
     private void updateCountDownText() {
@@ -182,5 +181,26 @@ public class TimerFragment extends Fragment {
 
         String timeLeftFormatted = String.format(Locale.getDefault(),"%02d:%02d", minutes, seconds);
         tvRemainingTime.setText(timeLeftFormatted);
+    }
+
+    private void updateButton() {
+        if (isTimerRunning) {
+            btStartPause.setText("pause");
+            btReset.setVisibility(View.INVISIBLE);
+        } else {
+            btStartPause.setText("start");
+            if (timeLeftMillis < 1000) {
+                btStartPause.setText("start");
+                btStartPause.setVisibility(View.INVISIBLE);
+            } else {
+                btStartPause.setVisibility(View.VISIBLE);
+            }
+
+            if (timeLeftMillis < START_TIME_IN_MILLIS) {
+                btReset.setVisibility(View.VISIBLE);
+            } else {
+                btReset.setVisibility(View.INVISIBLE);
+            }
+        }
     }
 }

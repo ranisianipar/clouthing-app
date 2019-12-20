@@ -21,6 +21,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private SidebarViewModel sidebarViewModel;
 
+    private TimerFragment timerFragment;
+
+    private final String TIMER_FRAGMENT_TAG = "timerfragmenttag";
+    private final String ABOUT_ME_FRAGMENT_TAG = "aboutmefragmenttag";
+    private final String LAUNDRY_FRAGMENT_TAG = "laundryfragmenttag";
+    private final String LANGUAGE_FRAGMENT_TAG = "languagefragmenttag";
+    private final String HOME_FRAGMENT_TAG = "homefragmenttag";
+
+    private String ACTIVE_FRAGMENT_TAG = HOME_FRAGMENT_TAG; // default
+
 //    private ImageButton buttonCreateForm;
 
 
@@ -49,6 +59,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new HomeFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_home);
+        } else if (ACTIVE_FRAGMENT_TAG.equals(TIMER_FRAGMENT_TAG)) {
+            timerFragment = (TimerFragment) getSupportFragmentManager().findFragmentByTag(TIMER_FRAGMENT_TAG);
+
         }
 
     }
@@ -65,35 +78,62 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        setFragment(menuItem);
+        // close drawer
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    private void setFragment(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
 
             case R.id.nav_home:
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new HomeFragment()).commit();
+                        .replace(R.id.fragment_container, new HomeFragment(), HOME_FRAGMENT_TAG).commit();
+                ACTIVE_FRAGMENT_TAG = HOME_FRAGMENT_TAG;
                 break;
             case R.id.nav_laundry:
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new LaundryFragment()).commit();
+                        .replace(R.id.fragment_container, new LaundryFragment(), LAUNDRY_FRAGMENT_TAG).commit();
+                ACTIVE_FRAGMENT_TAG = LAUNDRY_FRAGMENT_TAG;
                 break;
             case R.id.nav_language:
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new LanguageFragment()).commit();
+                        .replace(R.id.fragment_container, new LanguageFragment(), LANGUAGE_FRAGMENT_TAG).commit();
+                ACTIVE_FRAGMENT_TAG = LANGUAGE_FRAGMENT_TAG;
                 break;
             case R.id.nav_about_me:
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new AboutMeFragment()).commit();
+                        .replace(R.id.fragment_container, new AboutMeFragment(), ABOUT_ME_FRAGMENT_TAG).commit();
+                ACTIVE_FRAGMENT_TAG = ABOUT_ME_FRAGMENT_TAG;
                 break;
             case R.id.nav_timer:
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new TimerFragment()).commit();
+                        .replace(R.id.fragment_container, new TimerFragment(), TIMER_FRAGMENT_TAG).commit();
+                ACTIVE_FRAGMENT_TAG = TIMER_FRAGMENT_TAG;
                 break;
             case R.id.nav_logout:
                 Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show();
                 // do logout
                 break;
         }
-        // close drawer
-        mDrawerLayout.closeDrawer(GravityCompat.START);
-        return true;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        // Menyimpan data tertentu (String) ke Bundle
+        // savedInstanceState.putInt(SOME_VALUE, someIntValue);
+        // savedInstanceState.putString(SOME_OTHER_VALUE, someStringValue);
+        // Selalu simpan pemanggil superclass di bawah agar data di view tetap tersimpan
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        // Menyimpan data tertentu (String) ke Bundle
+        // savedInstanceState.putInt(SOME_VALUE, someIntValue);
+        // savedInstanceState.putString(SOME_OTHER_VALUE, someStringValue);
+        // Selalu simpan pemanggil superclass di bawah agar data di view tetap tersimpan
+        super.onSaveInstanceState(savedInstanceState);
     }
 }
