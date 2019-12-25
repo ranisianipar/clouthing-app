@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Locale;
 
@@ -68,6 +69,12 @@ public class TimerFragment extends Fragment {
 
         btStartPause = timerView.findViewById(R.id.bt_start_pause);
         btReset = timerView.findViewById(R.id.bt_reset);
+        tvRemainingTime = timerView.findViewById(R.id.tv_timer_view);
+
+
+        if (btReset == null || btStartPause == null) {
+            Toast.makeText(container.getContext(), "NO COMPONENTS!", Toast.LENGTH_SHORT).show();
+        }
 
         if (savedInstanceState != null) {
             // belom ngecek, harusnya si bener
@@ -100,22 +107,24 @@ public class TimerFragment extends Fragment {
         return timerView;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
+    // ERROR RAISED
+//    @Override
+//    public void onAttach(Context context) {
+//        super.onAttach(context);
+//        if (context instanceof OnFragmentInteractionListener) {
+//            mListener = (OnFragmentInteractionListener) context;
+//        } else {
+//
+//            throw new RuntimeException(context.toString()
+//                    + " must implement OnFragmentInteractionListener");
+//        }
+//    }
+//
+//    @Override
+//    public void onDetach() {
+//        super.onDetach();
+//        mListener = null;
+//    }
 
     /**
      * This interface must be implemented by activities that contain this
@@ -140,6 +149,15 @@ public class TimerFragment extends Fragment {
 
         // Selalu simpan pemanggil superclass di bawah agar data di view tetap tersimpan
         super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            timeLeftMillis = savedInstanceState.getLong(TIME_LEFT_TAG);
+            isTimerRunning = savedInstanceState.getBoolean(IS_TIME_RUNNING_TAG);
+        }
     }
 
 
@@ -173,6 +191,7 @@ public class TimerFragment extends Fragment {
     private void resetTimer() {
         timeLeftMillis = START_TIME_IN_MILLIS;
         updateButton();
+        updateCountDownText();
     }
 
     private void updateCountDownText() {

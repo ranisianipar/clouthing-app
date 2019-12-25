@@ -5,6 +5,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.os.Bundle;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private final String HOME_FRAGMENT_TAG = "homefragmenttag";
 
     private String ACTIVE_FRAGMENT_TAG = HOME_FRAGMENT_TAG; // default
+    private Fragment ACTIVE_FRAGMENT = new HomeFragment();
 
 //    private ImageButton buttonCreateForm;
 
@@ -57,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // default fragment
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new HomeFragment()).commit();
+                    .replace(R.id.fragment_container, ACTIVE_FRAGMENT).commit();
             navigationView.setCheckedItem(R.id.nav_home);
         } else if (ACTIVE_FRAGMENT_TAG.equals(TIMER_FRAGMENT_TAG)) {
             timerFragment = (TimerFragment) getSupportFragmentManager().findFragmentByTag(TIMER_FRAGMENT_TAG);
@@ -88,28 +90,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (menuItem.getItemId()) {
 
             case R.id.nav_home:
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new HomeFragment(), HOME_FRAGMENT_TAG).commit();
+                ACTIVE_FRAGMENT = new HomeFragment();
                 ACTIVE_FRAGMENT_TAG = HOME_FRAGMENT_TAG;
+
                 break;
             case R.id.nav_laundry:
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new LaundryFragment(), LAUNDRY_FRAGMENT_TAG).commit();
+                ACTIVE_FRAGMENT = new LaundryFragment();
                 ACTIVE_FRAGMENT_TAG = LAUNDRY_FRAGMENT_TAG;
                 break;
             case R.id.nav_language:
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new LanguageFragment(), LANGUAGE_FRAGMENT_TAG).commit();
+                ACTIVE_FRAGMENT = new LanguageFragment();
                 ACTIVE_FRAGMENT_TAG = LANGUAGE_FRAGMENT_TAG;
                 break;
             case R.id.nav_about_me:
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new AboutMeFragment(), ABOUT_ME_FRAGMENT_TAG).commit();
+                ACTIVE_FRAGMENT = new AboutMeFragment();
                 ACTIVE_FRAGMENT_TAG = ABOUT_ME_FRAGMENT_TAG;
                 break;
             case R.id.nav_timer:
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new TimerFragment(), TIMER_FRAGMENT_TAG).commit();
+                ACTIVE_FRAGMENT = new TimerFragment();
                 ACTIVE_FRAGMENT_TAG = TIMER_FRAGMENT_TAG;
                 break;
             case R.id.nav_logout:
@@ -117,23 +115,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // do logout
                 break;
         }
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, ACTIVE_FRAGMENT, ACTIVE_FRAGMENT_TAG).commit();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState) {
-        // Menyimpan data tertentu (String) ke Bundle
-        // savedInstanceState.putInt(SOME_VALUE, someIntValue);
-        // savedInstanceState.putString(SOME_OTHER_VALUE, someStringValue);
-        // Selalu simpan pemanggil superclass di bawah agar data di view tetap tersimpan
         super.onSaveInstanceState(savedInstanceState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        // Menyimpan data tertentu (String) ke Bundle
-        // savedInstanceState.putInt(SOME_VALUE, someIntValue);
-        // savedInstanceState.putString(SOME_OTHER_VALUE, someStringValue);
-        // Selalu simpan pemanggil superclass di bawah agar data di view tetap tersimpan
         super.onSaveInstanceState(savedInstanceState);
     }
 }
