@@ -33,8 +33,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String ACTIVE_FRAGMENT_TAG = HOME_FRAGMENT_TAG; // default
     private Fragment ACTIVE_FRAGMENT = new HomeFragment();
 
-//    private ImageButton buttonCreateForm;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

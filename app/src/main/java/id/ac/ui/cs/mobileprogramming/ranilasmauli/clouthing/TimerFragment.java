@@ -1,7 +1,5 @@
 package id.ac.ui.cs.mobileprogramming.ranilasmauli.clouthing;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,49 +9,34 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Locale;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link TimerFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link TimerFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class TimerFragment extends Fragment {
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final long START_TIME_IN_MILLIS = 60000;
     private static final String TIME_LEFT_TAG = "timelefttag";
     private static final String IS_TIME_RUNNING_TAG = "istimerunning";
 
     private CountDownTimer countDownTimer;
 
     private TextView tvRemainingTime;
+    private EditText etRemainingTime;
     private Button btStartPause;
+    private Button btSetTime;
     private Button btReset;
+    private long startTimeInMillis = 60000;
 
-    // TODO: Rename and change types of parameters
-    private long timeLeftMillis = START_TIME_IN_MILLIS;
+    private long timeLeftMillis = startTimeInMillis;
     private boolean isTimerRunning;
 
-    private OnFragmentInteractionListener mListener;
+
 
     public TimerFragment() {
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
-    public static TimerFragment newInstance() {
-        TimerFragment fragment = new TimerFragment();
-        Bundle args = new Bundle();
-
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,12 +48,13 @@ public class TimerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View timerView = inflater.inflate(R.layout.fragment_timer, container, false);
+        final View timerView = inflater.inflate(R.layout.fragment_timer, container, false);
 
         btStartPause = timerView.findViewById(R.id.bt_start_pause);
         btReset = timerView.findViewById(R.id.bt_reset);
         tvRemainingTime = timerView.findViewById(R.id.tv_timer_view);
-
+        etRemainingTime = timerView.findViewById(R.id.et_remain_time);
+        btSetTime = timerView.findViewById(R.id.bt_set_time);
 
         if (btReset == null || btStartPause == null) {
             Toast.makeText(container.getContext(), "NO COMPONENTS!", Toast.LENGTH_SHORT).show();
@@ -82,6 +66,15 @@ public class TimerFragment extends Fragment {
              isTimerRunning = savedInstanceState.getBoolean(IS_TIME_RUNNING_TAG);
             // Lakukan ssesuatu dengan someStateValue jika diperlukan
         }
+
+        btSetTime.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                setTime(Integer.parseInt(etRemainingTime.getText().toString())*1000);
+                Toast.makeText(timerView.getContext(), "Time has been set!", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         btStartPause.setOnClickListener(new View.OnClickListener() {
 
@@ -107,39 +100,6 @@ public class TimerFragment extends Fragment {
         return timerView;
     }
 
-    // ERROR RAISED
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-//
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
@@ -160,7 +120,10 @@ public class TimerFragment extends Fragment {
         }
     }
 
-
+    private void setTime(long timeInMillis) {
+        this.startTimeInMillis = timeInMillis;
+        resetTimer();
+    }
 
     private void startTimer() {
         countDownTimer = new CountDownTimer(timeLeftMillis, 1000) {
@@ -173,9 +136,11 @@ public class TimerFragment extends Fragment {
             @Override
             public void onFinish() {
                 isTimerRunning = false;
-                // notification
+                timeLeftMillis = 0;
+                updateCountDownText();
                 updateButton();
-                btReset.setText("Got my clothing cleaned!");
+                // notification
+
             }
         }.start();
 
@@ -189,7 +154,7 @@ public class TimerFragment extends Fragment {
         updateButton();
     }
     private void resetTimer() {
-        timeLeftMillis = START_TIME_IN_MILLIS;
+        timeLeftMillis = startTimeInMillis;
         updateButton();
         updateCountDownText();
     }
@@ -200,6 +165,14 @@ public class TimerFragment extends Fragment {
 
         String timeLeftFormatted = String.format(Locale.getDefault(),"%02d:%02d", minutes, seconds);
         tvRemainingTime.setText(timeLeftFormatted);
+    }
+
+//    time is in mm:ss format
+    private long getTimeLeftMillis(String timeInFormat) {
+        String[] timeArray = timeInFormat.split(":");
+        int minutes = Integer.parseInt(timeArray[0]);
+        int seconds = Integer.parseInt(timeArray[1]);
+        return (minutes * 60 + seconds) * 1000;
     }
 
     private void updateButton() {
@@ -215,7 +188,7 @@ public class TimerFragment extends Fragment {
                 btStartPause.setVisibility(View.VISIBLE);
             }
 
-            if (timeLeftMillis < START_TIME_IN_MILLIS) {
+            if (timeLeftMillis < startTimeInMillis) {
                 btReset.setVisibility(View.VISIBLE);
             } else {
                 btReset.setVisibility(View.INVISIBLE);
