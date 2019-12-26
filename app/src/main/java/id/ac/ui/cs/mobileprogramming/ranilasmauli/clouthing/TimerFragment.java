@@ -1,10 +1,15 @@
 package id.ac.ui.cs.mobileprogramming.ranilasmauli.clouthing;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +20,14 @@ import android.widget.Toast;
 
 import java.util.Locale;
 
+import static id.ac.ui.cs.mobileprogramming.ranilasmauli.clouthing.CountDownTimerService.TIME_LEFT_MILLIS_TAG;
+
 public class TimerFragment extends Fragment {
+
+    IntentFilter filter = new IntentFilter();
+    private BroadcastReceiver timerBroadcastReceiver;
+
+    public static final String START_TIME_TAG = "starttimetag";
     private static final String TIME_LEFT_TAG = "timelefttag";
     private static final String IS_TIME_RUNNING_TAG = "istimerunning";
 
@@ -37,6 +49,14 @@ public class TimerFragment extends Fragment {
         // Required empty public constructor
     }
 
+    public void setTimeLeftInMillis(long time) {
+        this.timeLeftMillis = time;
+    }
+
+    public long getTimeInMillis() {
+        return this.timeLeftMillis;
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,21 +70,11 @@ public class TimerFragment extends Fragment {
 
         final View timerView = inflater.inflate(R.layout.fragment_timer, container, false);
 
-        btStartPause = timerView.findViewById(R.id.bt_start_pause);
-        btReset = timerView.findViewById(R.id.bt_reset);
-        tvRemainingTime = timerView.findViewById(R.id.tv_timer_view);
-        etRemainingTime = timerView.findViewById(R.id.et_remain_time);
-        btSetTime = timerView.findViewById(R.id.bt_set_time);
-
-        if (btReset == null || btStartPause == null) {
-            Toast.makeText(container.getContext(), "NO COMPONENTS!", Toast.LENGTH_SHORT).show();
-        }
+        init(timerView);
 
         if (savedInstanceState != null) {
-            // belom ngecek, harusnya si bener
              timeLeftMillis = savedInstanceState.getInt(TIME_LEFT_TAG);
              isTimerRunning = savedInstanceState.getBoolean(IS_TIME_RUNNING_TAG);
-            // Lakukan ssesuatu dengan someStateValue jika diperlukan
         }
 
         btSetTime.setOnClickListener(new View.OnClickListener() {
@@ -84,6 +94,7 @@ public class TimerFragment extends Fragment {
                      pauseTimer();
                 } else {
                      startTimer();
+
                 }
             }
         });
@@ -98,6 +109,14 @@ public class TimerFragment extends Fragment {
 
         updateCountDownText();
         return timerView;
+    }
+
+    private void init(View timerView) {
+        btStartPause = timerView.findViewById(R.id.bt_start_pause);
+        btReset = timerView.findViewById(R.id.bt_reset);
+        tvRemainingTime = timerView.findViewById(R.id.tv_timer_view);
+        etRemainingTime = timerView.findViewById(R.id.et_remain_time);
+        btSetTime = timerView.findViewById(R.id.bt_set_time);
     }
 
 
@@ -118,6 +137,18 @@ public class TimerFragment extends Fragment {
             timeLeftMillis = savedInstanceState.getLong(TIME_LEFT_TAG);
             isTimerRunning = savedInstanceState.getBoolean(IS_TIME_RUNNING_TAG);
         }
+
+        timerBroadcastReceiver = new MyBroadcastReceiver();
+    }
+
+    public class MyBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            long time = intent.getLongExtra(TIME_LEFT_MILLIS_TAG, 60000);
+            setTimeLeftInMillis(time);
+
+            Log.d("BROADCAST RECEIVER", "onReceive: " + time);
+        }
     }
 
     private void setTime(long timeInMillis) {
@@ -125,36 +156,56 @@ public class TimerFragment extends Fragment {
         resetTimer();
     }
 
+    private long getTIme() {
+        return this.startTimeInMillis;
+    }
+
     private void startTimer() {
-        countDownTimer = new CountDownTimer(timeLeftMillis, 1000) {
-            @Override
-            public void onTick(long timeLeft) {
-                timeLeftMillis = timeLeft;
-                updateCountDownText();
-            }
+        Intent timerIntent = new Intent(getActivity(), CountDownTimerService.class);
+//        timerIntent.set
+        timerIntent.putExtra(START_TIME_TAG, getTIme());
+        getActivity().startService(timerIntent);
 
-            @Override
-            public void onFinish() {
-                isTimerRunning = false;
-                timeLeftMillis = 0;
-                updateCountDownText();
-                updateButton();
-                // notification
+        getActivity().registerReceiver(timerBroadcastReceiver, filter);
 
-            }
-        }.start();
+//        countDownTimer = new CountDownTimer(timeLeftMillis, 1000) {
+//            @Override
+//            public void onTick(long timeLeft) {
+//                timeLeftMillis = timeLeft;
+//                updateCountDownText();
+//            }
+//
+//            @Override
+//            public void onFinish() {
+//                isTimerRunning = false;
+//                timeLeftMillis = 0;
+//                updateCountDownText();
+//                updateButton();
+//                // notification
+//
+//            }
+//        }.start();
 
         isTimerRunning = true;
         updateButton();
 
     }
     private void pauseTimer() {
-        countDownTimer.cancel();
+        Intent timerIntent = new Intent(getActivity(), CountDownTimerService.class);
+        timerIntent.putExtra(START_TIME_TAG, getTIme());
+        getActivity().stopService(timerIntent);
+//        countDownTimer.cancel();
         isTimerRunning = false;
         updateButton();
     }
     private void resetTimer() {
-        timeLeftMillis = startTimeInMillis;
+        Intent timerIntent = new Intent(getActivity(), CountDownTimerService.class);
+        timerIntent.putExtra(START_TIME_TAG, getTIme());
+        getActivity().stopService(timerIntent);
+
+//        getActivity().unregisterReceiver(timerBroadcastReceiver);
+
+        setTimeLeftInMillis(startTimeInMillis);
         updateButton();
         updateCountDownText();
     }
@@ -165,14 +216,6 @@ public class TimerFragment extends Fragment {
 
         String timeLeftFormatted = String.format(Locale.getDefault(),"%02d:%02d", minutes, seconds);
         tvRemainingTime.setText(timeLeftFormatted);
-    }
-
-//    time is in mm:ss format
-    private long getTimeLeftMillis(String timeInFormat) {
-        String[] timeArray = timeInFormat.split(":");
-        int minutes = Integer.parseInt(timeArray[0]);
-        int seconds = Integer.parseInt(timeArray[1]);
-        return (minutes * 60 + seconds) * 1000;
     }
 
     private void updateButton() {

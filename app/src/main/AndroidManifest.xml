@@ -10,6 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".LaundryDetailActivity" />
+
         <activity android:name=".FormActivity" />
         <activity
             android:name=".MainActivity"
@@ -20,6 +21,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service
+            android:name=".CountDownTimerService"
+            android:enabled="true"
+            android:exported="true">
+        </service>
+        <receiver android:name=".TimerFragment$MyBroadcastReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="action.update.timer"/>
+            </intent-filter>
+        </receiver>
     </application>
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
