@@ -5,8 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -109,7 +112,12 @@ public class FormActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // save entity
+                if (isNetworkAvailable()) {
+                    // save entity
+                    Toast.makeText(getApplicationContext(), "Clothing saved!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "save fail! Check your connection.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -186,5 +194,12 @@ public class FormActivity extends AppCompatActivity {
         saveButton = findViewById(R.id.bt_save);
         textViewCountClothes = findViewById(R.id.tv_count_clothes);
         picPicker = findViewById(R.id.et_pic);
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
