@@ -1,8 +1,12 @@
 package id.ac.ui.cs.mobileprogramming.ranilasmauli.clouthing;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
 import android.app.DatePickerDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.ClipData;
 import android.content.Context;
@@ -23,9 +27,11 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class FormActivity extends AppCompatActivity {
 
+    public static final String CLOUTHING_REMINGDER_TITLE = "Get your laundry now!";
     private EditText pickDate;
     private EditText picPicker;
     private EditText reminderTime;
@@ -33,6 +39,10 @@ public class FormActivity extends AppCompatActivity {
     public static final int PICK_IMAGE = 1;
     public static final int PICK_CONTACT = 2;
 
+    int NOTIFICATION_ID = 0;
+    int requestId = 0;
+
+    public final String FORM_CHANNEL_ID = "FORM_CHANNEL";
     // Text View
     private TextView textViewCountClothes;
 
@@ -41,12 +51,19 @@ public class FormActivity extends AppCompatActivity {
     private Button saveButton;
     private Button uploadButton;
 
+    private NotificationManager mNotificationManager =
+            (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+    private Intent notificationIntent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form);
 
         init();
+
+        notificationIntent = new Intent(getApplicationContext(), NotificationResponseActivity.class);
 
         picPicker.setOnClickListener(new View.OnClickListener() {
 
@@ -201,5 +218,25 @@ public class FormActivity extends AppCompatActivity {
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    private void save(Date date, Laundry laundry) {
+         // ???
+
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent contentIntent = PendingIntent.getActivity(
+                this, requestId, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Notification noti = new NotificationCompat.Builder(getApplicationContext(), FORM_CHANNEL_ID)
+                .setWhen(date.getTime())  			//When the event occurred
+                .setContentTitle(CLOUTHING_REMINGDER_TITLE)   				//Title message top row.
+                .setContentText(laundry.getTitle())  	//message
+                .setContentIntent(contentIntent)  				//what activity to open.
+                .setAutoCancel(true)   						//allow auto cancel when pressed.
+                .build();
+
+        mNotificationManager.notify(NOTIFICATION_ID, noti);
+        NOTIFICATION_ID++;
+        requestId++;
     }
 }
