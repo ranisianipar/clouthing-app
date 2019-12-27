@@ -6,8 +6,10 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ClipData;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,15 +17,18 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
 public class FormActivity extends AppCompatActivity {
 
     private EditText pickDate;
+    private EditText picPicker;
     private EditText reminderTime;
     final Calendar calendar = Calendar.getInstance();
     public static final int PICK_IMAGE = 1;
+    public static final int PICK_CONTACT = 2;
 
     // Text View
     private TextView textViewCountClothes;
@@ -39,6 +44,16 @@ public class FormActivity extends AppCompatActivity {
         setContentView(R.layout.activity_form);
 
         init();
+
+        picPicker.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,
+                        ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
+                startActivityForResult(contactPickerIntent, PICK_CONTACT);
+            }
+        });
 
         pickDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,6 +159,25 @@ public class FormActivity extends AppCompatActivity {
             textViewCountClothes.setText(countImage + "");
 
         }
+
+        else if (requestCode == PICK_CONTACT && resultCode == RESULT_OK) {
+            Cursor cursor = null;
+            String phoneNo = null;
+            String name = null;
+
+            Uri uri = data.getData(); // save to DB
+
+            cursor = getContentResolver().query(uri, null, null, null, null);
+            cursor.moveToFirst();
+            int  phoneIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+            int  nameIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+            phoneNo = cursor.getString(phoneIndex);
+            name = cursor.getString(nameIndex);
+
+            picPicker.setText(name);
+
+            Toast.makeText(this, "PIC has been set to " + name, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void init() {
@@ -151,5 +185,6 @@ public class FormActivity extends AppCompatActivity {
         cancelButton = findViewById(R.id.bt_cancel);
         saveButton = findViewById(R.id.bt_save);
         textViewCountClothes = findViewById(R.id.tv_count_clothes);
+        picPicker = findViewById(R.id.et_pic);
     }
 }
