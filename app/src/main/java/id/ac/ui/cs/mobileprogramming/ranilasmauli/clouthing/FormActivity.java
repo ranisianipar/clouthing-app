@@ -35,14 +35,16 @@ public class FormActivity extends AppCompatActivity {
     private EditText pickDate;
     private EditText picPicker;
     private EditText reminderTime;
+    private EditText etPrice;
+    private EditText etDiscount;
     final Calendar calendar = Calendar.getInstance();
     public static final int PICK_IMAGE = 1;
     public static final int PICK_CONTACT = 2;
 
-    int NOTIFICATION_ID = 0;
-    int requestId = 0;
+    public NativeConnection nativeLib = new NativeConnection();
 
     public final String FORM_CHANNEL_ID = "FORM_CHANNEL";
+
     // Text View
     private TextView textViewCountClothes;
 
@@ -53,8 +55,9 @@ public class FormActivity extends AppCompatActivity {
 
     private NotificationManager mNotificationManager =
             (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
     private Intent notificationIntent;
+    int NOTIFICATION_ID = 0;
+    int requestId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -211,6 +214,9 @@ public class FormActivity extends AppCompatActivity {
         saveButton = findViewById(R.id.bt_save);
         textViewCountClothes = findViewById(R.id.tv_count_clothes);
         picPicker = findViewById(R.id.et_pic);
+
+        etDiscount = findViewById(R.id.et_discount);
+        etPrice = findViewById(R.id.et_amount);
     }
 
     private boolean isNetworkAvailable() {
@@ -220,9 +226,10 @@ public class FormActivity extends AppCompatActivity {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    private void save(Date date, Laundry laundry) {
-         // ???
+    private void save(Date date, Laundry laundry, int discount) {
+         laundry.setPrice(nativeLib.calculate(laundry.getPrice(),discount)); // final price
 
+        // set notification
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent contentIntent = PendingIntent.getActivity(
                 this, requestId, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);

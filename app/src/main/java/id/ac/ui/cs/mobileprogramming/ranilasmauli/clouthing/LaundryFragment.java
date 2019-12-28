@@ -54,7 +54,7 @@ public class LaundryFragment extends Fragment implements LaundryListAdapter.Item
         for (int x = 0; x < 5; x++) {
             Laundry dummy = new Laundry();
             dummy.setTitle("Dummy "+x);
-            dummy.setAmount(x+3);
+            dummy.setPrice(x+3);
             laundries.add(dummy);
         }
 

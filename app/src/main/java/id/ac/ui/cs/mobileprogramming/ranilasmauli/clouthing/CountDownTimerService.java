@@ -1,10 +1,15 @@
 package id.ac.ui.cs.mobileprogramming.ranilasmauli.clouthing;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.util.Log;
+
+import androidx.core.app.NotificationCompat;
 
 import static id.ac.ui.cs.mobileprogramming.ranilasmauli.clouthing.TimerFragment.START_TIME_TAG;
 
@@ -15,6 +20,16 @@ public class CountDownTimerService extends Service {
     private long timeLeftInMillis = START_TIME_MILLIS;
 
     public static String TIME_LEFT_MILLIS_TAG = "timeleftmillistag";
+
+    public final String COUNT_DOWN_NOTIF_TITLE = "Pick your clothes!";
+
+    private NotificationManager mNotificationManager =
+            (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+    private Intent notificationIntent;
+    int NOTIFICATION_ID = 0;
+    int requestId = 0;
+
+    public final String TIMER_CHANNEL_ID = "TIMER_CHANNEL";
 
     public CountDownTimerService() {
     }
@@ -57,7 +72,9 @@ public class CountDownTimerService extends Service {
                 // send broadcast to the activity --> alarm
                 // notification
                 update(0, intent);
-                Log.d("COUNT DOWN TIMER", "onFinish: "+timeLeftInMillis);
+                Log.d("COUNT DOWN TIMER", "onFinish: " + timeLeftInMillis);
+
+                sendNotif();
 
             }
         }.start();
@@ -79,6 +96,26 @@ public class CountDownTimerService extends Service {
         Log.d("UPDATE TIMER", "update: "+time);
 
         sendBroadcast(intent); // onReceive dont called
+    }
+
+    private void sendNotif() {
+
+        // set notification
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent contentIntent = PendingIntent.getActivity(
+                this, requestId, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Notification noti = new NotificationCompat.Builder(getApplicationContext(), TIMER_CHANNEL_ID)
+                .setWhen(System.currentTimeMillis())  			//When the event occurred
+                .setContentTitle(COUNT_DOWN_NOTIF_TITLE)   				//Title message top row.
+                .setContentText("Hurry")  	//message
+                .setContentIntent(contentIntent)  				//what activity to open.
+                .setAutoCancel(true)   						//allow auto cancel when pressed.
+                .build();
+
+        mNotificationManager.notify(NOTIFICATION_ID, noti);
+        NOTIFICATION_ID++;
+        requestId++;
     }
 
 }

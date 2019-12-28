@@ -7,8 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import java.util.Date;
-
 @Entity(tableName = "Laundries")
 public class Laundry implements Parcelable {
     @PrimaryKey(autoGenerate = true)
@@ -18,7 +16,7 @@ public class Laundry implements Parcelable {
     private String title;
 
     @NonNull
-    private int amount;
+    private int price;
 
     private String pic;
 
@@ -63,12 +61,12 @@ public class Laundry implements Parcelable {
         this.title = title;
     }
 
-    public int getAmount() {
-        return amount;
+    public int getPrice() {
+        return price;
     }
 
-    public void setAmount(int amount) {
-        this.amount = amount;
+    public void setPrice(int price) {
+        this.price = price;
     }
 
     public String getPic() {
@@ -120,7 +118,7 @@ public class Laundry implements Parcelable {
 
     protected Laundry(Parcel parcel) {
         this.title = parcel.readString();
-        this.amount = parcel.readInt();
+        this.price = parcel.readInt();
     }
 
     public static final Creator<Laundry> CREATOR = new Creator<Laundry>() {
@@ -144,7 +142,7 @@ public class Laundry implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(title);
-        parcel.writeInt(amount);
+        parcel.writeInt(price);
     }
 
 

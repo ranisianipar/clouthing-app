@@ -19,4 +19,7 @@
     <string name="button_cancel">Cancel</string>
     <string name="button_upload">Add clothes!</string>
     <string name="form_activity_title">Add Laundry</string>
+
+    <string name="form_label_price">Price</string>
+    <string name="form_label_discount">Discount (%)</string>
 </resources>
